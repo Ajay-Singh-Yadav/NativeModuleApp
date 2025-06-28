@@ -111,10 +111,16 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation "androidx.biometric:biometric:1.2.0-alpha04"
+    implementation "androidx.fragment:fragment-ktx:1.6.2"
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
+     
     } else {
         implementation jscFlavor
     }
 }
+
+
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

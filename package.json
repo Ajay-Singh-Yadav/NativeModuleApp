@@ -2,15 +2,6 @@
   "name": "NativeModuleApp",
   "version": "0.0.1",
   "private": true,
-   "codegenConfig": {
-     "name": "NativeLocalStorageSpec",
-     "type": "modules",
-     "jsSrcsDir": "specs",
-     "android": {
-       "javaPackageName": "com.nativelocalstorage"
-     }
-   },
-
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -20,9 +11,15 @@
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.80.0",
+    "@react-navigation/native": "^7.1.14",
+    "@react-navigation/stack": "^7.4.2",
     "react": "19.1.0",
     "react-native": "0.80.0",
-    "react-native-codegen": "^0.70.7"
+    "react-native-codegen": "^0.70.7",
+    "react-native-gesture-handler": "^2.26.0",
+    "react-native-safe-area-context": "^5.5.0",
+    "react-native-screens": "^4.11.1",
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

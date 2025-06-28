@@ -1,72 +1,23 @@
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Button,
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './src/screens/HomeScreen';
+import SecureScreen from './src/screens/SecureScreen';
 
-import NativeLocalStorage from './specs/NativeLocalStorage';
+const Stack = createStackNavigator();
 
-const EMPTY = '<empty>';
-
-function App(): React.JSX.Element {
-  const [value, setValue] = React.useState<string | null>(null);
-
-  const [editingValue, setEditingValue] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const storedValue = NativeLocalStorage?.getItem('myKey');
-    setValue(storedValue ?? '');
-  }, []);
-
-  function saveValue() {
-    NativeLocalStorage?.setItem(editingValue ?? EMPTY, 'myKey');
-    setValue(editingValue);
-  }
-
-  function clearAll() {
-    NativeLocalStorage?.clear();
-    setValue('');
-  }
-
-  function deleteValue() {
-    NativeLocalStorage?.removeItem('myKey');
-    setValue('');
-  }
-
+const App = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Text style={styles.text}>
-        Current stored value is: {value ?? 'No Value'}
-      </Text>
-      <TextInput
-        placeholder="Enter the text you want to store"
-        style={styles.textInput}
-        onChangeText={setEditingValue}
-      />
-      <Button title="Save" onPress={saveValue} />
-      <Button title="Delete" onPress={deleteValue} />
-      <Button title="Clear" onPress={clearAll} />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Secure" component={SecureScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  text: {
-    margin: 10,
-    fontSize: 20,
-  },
-  textInput: {
-    margin: 10,
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 1,
-    paddingLeft: 5,
-    paddingRight: 5,
-    borderRadius: 5,
-  },
-});
+};
 
 export default App;
+
+const styles = StyleSheet.create({});
