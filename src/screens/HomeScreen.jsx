@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  StatusBar,
 } from 'react-native';
 
 //icons
@@ -57,6 +58,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#121212" />
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Feather name="search" size={20} color="#aaa" />
