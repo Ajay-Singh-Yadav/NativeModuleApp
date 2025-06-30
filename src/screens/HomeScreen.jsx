@@ -1,30 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  FlatList,
-  Image,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-  Alert,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 
-//icons
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { NativeModules } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
-const recentItems = [
-  { id: '1', name: 'Screenshot', image: require('../assets/images/pic1.jpeg') },
-  { id: '2', name: 'Screenshot', image: require('../assets/images/pic2.jpeg') },
-  { id: '3', name: 'Screenshot', image: require('../assets/images/pic1.jpeg') },
-  { id: '4', name: 'Pandit', image: require('../assets/images/pic2.jpeg') },
-];
+import { useNavigation } from '@react-navigation/native';
+import TopBar from '../components/Topbar';
+
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withRepeat,
+  Easing,
+} from 'react-native-reanimated';
 
 const categories = [
   { name: 'Downloads', size: '1.3 GB' },
@@ -36,6 +34,8 @@ const categories = [
 ];
 
 const { BiometricModule } = NativeModules;
+
+const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -56,21 +56,38 @@ const HomeScreen = () => {
     }
   };
 
+  // Text Animation
+
+  const boxWidth = width * 0.48;
+  const textWidth = boxWidth * 2;
+
+  const offsetX = useSharedValue(boxWidth);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: offsetX.value }],
+  }));
+
+  useEffect(() => {
+    offsetX.value = withRepeat(
+      withTiming(-textWidth, {
+        duration: 6000,
+        easing: Easing.linear,
+      }),
+      -1,
+      false,
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#121212" />
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <Feather name="search" size={20} color="#aaa" />
-        <TextInput
-          placeholder='Search "invoice"'
-          placeholderTextColor="#aaa"
-          style={styles.searchInput}
-        />
+      <StatusBar barStyle="light-content" backgroundColor="#18232A" />
+
+      <View style={{ marginBottom: 10 }}>
+        <TopBar title="All files" />
       </View>
 
       {/* Categories */}
-      <Text style={styles.sectionTitle}>Categories</Text>
+
       <View style={styles.gridContainer}>
         {categories.map((item, index) => (
           <View key={index} style={styles.gridItem}>
@@ -81,7 +98,7 @@ const HomeScreen = () => {
       </View>
 
       {/* Collections */}
-      <Text style={styles.sectionTitle}>Collections</Text>
+      <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Collections</Text>
       <View style={styles.row}>
         <View style={styles.collectionBox}>
           <Text style={styles.gridTitle}>★ Starred</Text>
@@ -101,9 +118,19 @@ const HomeScreen = () => {
           <Text style={styles.gridTitle}>📱 Internal storage</Text>
           <Text style={styles.gridSub}>55 GB free</Text>
         </View>
+
+        {/* Collection Box */}
         <View style={styles.collectionBox}>
           <Text style={styles.gridTitle}>💾 Other storage</Text>
-          <Text style={styles.gridSub}>Browse cloud</Text>
+
+          <View style={styles.marqueeWrapper}>
+            <Animated.Text
+              style={[styles.marqueeText, animatedStyle, { width: textWidth }]}
+              numberOfLines={1}
+            >
+              Browse cloud storage and developer files
+            </Animated.Text>
+          </View>
         </View>
       </View>
 
@@ -118,30 +145,11 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#18232A',
     paddingHorizontal: 16,
-    paddingTop: 20,
+    paddingTop: 10,
   },
-  searchContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#1f1f1f',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 30,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  searchInput: {
-    color: '#fff',
-    marginLeft: 10,
-    flex: 1,
-  },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
+
   recentList: {
     borderWidth: 1,
   },
@@ -154,6 +162,10 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 12,
   },
+  sectionTitle: {
+    color: '#fff',
+    marginBottom: 20,
+  },
   recentText: {
     color: '#fff',
     fontSize: 12,
@@ -165,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   gridItem: {
-    backgroundColor: '#1f1f1f',
+    backgroundColor: '#0F1417',
     width: '47%',
     padding: 12,
     borderRadius: 10,
@@ -186,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   collectionBox: {
-    backgroundColor: '#1f1f1f',
+    backgroundColor: '#0F1417',
     width: '48%',
     padding: 16,
     borderRadius: 10,
@@ -196,10 +208,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 24,
-    backgroundColor: '#0a5fd7',
+    backgroundColor: '#004C6B',
     padding: 16,
     borderRadius: 30,
     elevation: 6,
+  },
+  textStyle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  marqueeWrapper: {
+    overflow: 'hidden',
+    width: '100%', // matches collectionBox width (48%)
+    height: 20,
+    marginTop: 4,
+  },
+
+  marqueeText: {
+    color: '#fff',
+    fontSize: 12,
   },
 });
 

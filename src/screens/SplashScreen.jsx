@@ -1,91 +1,58 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import {
+  Dimensions,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, { useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
 
 const SplashScreen = () => {
-  const flip = useSharedValue(0);
+  const navigation = useNavigation();
+  const scale = useSharedValue(0.6);
+  const opacity = useSharedValue(0);
 
-  const FrontImage = require('../assets/images/pic1.jpeg');
+  useEffect(() => {
+    scale.value = withTiming(1, {
+      duration: 1000,
+      easing: Easing.out(Easing.exp),
+    });
 
-  const backImage = require('../assets/images/pic2.jpeg');
+    opacity.value = withTiming(1, {
+      duration: 1000,
+      easing: Easing.out(Easing.exp),
+    });
 
-  const animatedFrontStyle = useAnimatedStyle(() => {
+    setTimeout(() => {
+      navigation.replace('Home');
+    }, 1500);
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ perspective: 1000 }, { rotateY: `${flip.value + 180}deg` }],
-      opacity: flip.value < 90 ? 1 : 0,
+      transform: [{ scale: scale.value }],
+      opacity: opacity.value,
     };
   });
-  const animatedBackStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ perspective: 1000 }, { rotateY: `${flip.value}deg` }],
-      opacity: flip.value >= 90 ? 1 : 0,
-    };
-  });
-
-  const handleFlip = () => {
-    flip.value = withSpring(flip.value === 0 ? 180 : 0);
-  };
 
   return (
     <View style={styles.container}>
-      <View style={{ height: 100, width: 100, position: 'relative' }}>
-        <Animated.View
-          style={[
-            animatedFrontStyle,
-            {
-              position: 'absolute',
-              backgroundColor: '#fff',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-            },
-          ]}
-        >
-          <Image
-            source={FrontImage}
-            style={{
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-              resizeMode: 'cover',
-            }}
-          />
-        </Animated.View>
-        {/* second images */}
-        <Animated.View
-          style={[
-            animatedBackStyle,
-            {
-              position: 'absolute',
-              backgroundColor: '#fff',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-            },
-          ]}
-        >
-          <Image
-            source={FrontImage}
-            style={{
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-              resizeMode: 'cover',
-            }}
-          />
-        </Animated.View>
-      </View>
-      <TouchableOpacity onPress={handleFlip}>
-        <Text>Flip</Text>
-      </TouchableOpacity>
+      <StatusBar backgroundColor="#121212" barStyle="light-content" />
+      <Animated.Image
+        source={require('../assets/images/splashIcons.png')}
+        style={[styles.logo, animatedStyle]}
+        resizeMode="contain"
+      />
     </View>
   );
 };
@@ -95,7 +62,12 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#121212',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logo: {
+    width: width * 0.4,
+    height: width * 0.4,
   },
 });

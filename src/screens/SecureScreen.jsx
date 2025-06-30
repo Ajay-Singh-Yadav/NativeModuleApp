@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -9,9 +9,22 @@ import {
   Modal,
   Pressable,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFS from 'react-native-fs';
+
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+} from 'react-native-reanimated';
+
+import Octicons from 'react-native-vector-icons/Octicons';
+import TopBar from '../components/Topbar';
+
+import LottieView from 'lottie-react-native';
 
 const SecureScreen = () => {
   const [images, setImages] = useState([]);
@@ -41,20 +54,36 @@ const SecureScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#18232A" />
+      <TopBar title="Secure Folder" showBack />
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Image Grid */}
         <View style={styles.grid}>
-          {images.map((uri, index) => (
-            <TouchableOpacity key={index} onPress={() => setSelectedImage(uri)}>
-              <Image source={{ uri }} style={styles.image} />
-            </TouchableOpacity>
-          ))}
+          {images.length === 0 ? (
+            <View style={styles.lottieContainer}>
+              <LottieView
+                source={require('../assets/animation/secure.json')}
+                autoPlay
+                loop
+                style={styles.lottie}
+              />
+              <Text style={styles.noImageTextWord}>No images added yet</Text>
+            </View>
+          ) : (
+            images.map((uri, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedImage(uri)}
+              >
+                <Image source={{ uri }} style={styles.image} />
+              </TouchableOpacity>
+            ))
+          )}
         </View>
       </ScrollView>
-
       <TouchableOpacity style={styles.addButton} onPress={openGallery}>
-        <Text style={styles.addText}>Add</Text>
+        <Octicons name="shield-lock" size={24} color="#fff" />
       </TouchableOpacity>
-
       {/* Fullscreen Image Modal */}
       <Modal visible={!!selectedImage} transparent={true} animationType="fade">
         <View style={styles.fullscreenContainer}>
@@ -82,7 +111,7 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#18232A',
   },
   scrollContent: {
     padding: 10,
@@ -100,19 +129,42 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: 40,
+    right: 40,
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#eee',
+    backgroundColor: '#004C6B',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 4,
+    elevation: 7,
   },
   addText: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  lottieContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+    width: '100%',
+  },
+  lottie: {
+    width: 200,
+    height: 200,
+  },
+  floatingTextContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  noImageTextWord: {
+    color: '#fff',
+    fontSize: 18,
+    marginHorizontal: 5,
+    fontWeight: '500',
   },
 });
 

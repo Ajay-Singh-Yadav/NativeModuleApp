@@ -13,8 +13,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
-        {/* <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Secure" component={SecureScreen} /> */}
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Secure" component={SecureScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
