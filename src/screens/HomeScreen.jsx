@@ -18,7 +18,6 @@ import TopBar from '../components/Topbar';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
   withRepeat,
   Easing,
@@ -39,6 +38,8 @@ const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+
+  const blinkOpacity = useSharedValue(1);
 
   const handleSafeFolderPress = async () => {
     try {
@@ -67,6 +68,10 @@ const HomeScreen = () => {
     transform: [{ translateX: offsetX.value }],
   }));
 
+  const blinkStyle = useAnimatedStyle(() => ({
+    opacity: blinkOpacity.value,
+  }));
+
   useEffect(() => {
     offsetX.value = withRepeat(
       withTiming(-textWidth, {
@@ -75,6 +80,16 @@ const HomeScreen = () => {
       }),
       -1,
       false,
+    );
+
+    // blink animation
+    blinkOpacity.value = withRepeat(
+      withTiming(0, {
+        duration: 500,
+        easing: Easing.linear,
+      }),
+      -1,
+      true, // reverse = true (blinks back and forth)
     );
   }, []);
 
@@ -106,7 +121,14 @@ const HomeScreen = () => {
             navigation.navigate('Drag');
           }}
         >
-          <Text style={styles.gridTitle}>★ Starred</Text>
+          {/* <Text style={[styles.starIcon, blinkStyle]}>★ Starred</Text> */}
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Animated.Text style={[styles.starIcon, blinkStyle]}>
+              ★
+            </Animated.Text>
+
+            <Text style={styles.gridTitle}> Starred</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.collectionBox}
@@ -162,6 +184,12 @@ const styles = StyleSheet.create({
     marginRight: 12,
     alignItems: 'center',
   },
+  starIcon: {
+    color: '#FFF',
+    fontSize: 14,
+    marginRight: 4,
+  },
+
   recentImage: {
     width: 80,
     height: 80,
