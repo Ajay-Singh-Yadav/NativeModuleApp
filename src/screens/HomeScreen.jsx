@@ -118,7 +118,7 @@ const HomeScreen = () => {
         <TouchableOpacity
           style={styles.collectionBox}
           onPress={() => {
-            navigation.navigate('Drag');
+            navigation.navigate('files');
           }}
         >
           {/* <Text style={[styles.starIcon, blinkStyle]}>★ Starred</Text> */}

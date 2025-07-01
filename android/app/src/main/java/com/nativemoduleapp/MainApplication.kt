@@ -23,6 +23,8 @@ class MainApplication : Application(), ReactApplication {
               // add(MyReactNativePackage())
               add(FlashlightPackage())
               add(BiometricPackage())
+              add(GalleryPackage())
+
            
               
 
