@@ -11,6 +11,10 @@ class GalleryModule(private val reactContext: ReactApplicationContext) :
 
   override fun getName(): String = "GalleryModule"
 
+
+
+
+  
   @ReactMethod
   fun getImages(promise: Promise) {
     val images = Arguments.createArray()
@@ -20,16 +24,32 @@ class GalleryModule(private val reactContext: ReactApplicationContext) :
       MediaStore.Images.Media.EXTERNAL_CONTENT_URI
     }
 
-    val projection = arrayOf(MediaStore.Images.Media._ID)
+    val projection = arrayOf(
+      MediaStore.Images.Media._ID,
+      MediaStore.Images.Media.DISPLAY_NAME, // 👈 Add file name
+      MediaStore.Images.Media.SIZE          // 👈 Add size if needed
+    )
+
     val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
     val cursor = reactContext.contentResolver.query(collection, projection, null, null, sortOrder)
 
     cursor?.use {
       val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+      val nameColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+      val sizeColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
+
       while (it.moveToNext()) {
         val id = it.getLong(idColumn)
+        val name = it.getString(nameColumn)
+        val size = it.getLong(sizeColumn)
         val uri = ContentUris.withAppendedId(collection, id)
-        images.pushString(uri.toString())
+
+        val imageObject = Arguments.createMap()
+        imageObject.putString("uri", uri.toString())
+        imageObject.putString("name", name)
+        imageObject.putDouble("size", size.toDouble())
+
+        images.pushMap(imageObject)
       }
     }
 
@@ -45,7 +65,7 @@ class GalleryModule(private val reactContext: ReactApplicationContext) :
       MediaStore.Video.Media.EXTERNAL_CONTENT_URI
     }
 
-    val projection = arrayOf(MediaStore.Video.Media._ID)
+    val projection = arrayOf(MediaStore.Video.Media._ID, MediaStore.Images.Media.DISPLAY_NAME, )
     val sortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
     val cursor = reactContext.contentResolver.query(collection, projection, null, null, sortOrder)
 
@@ -61,3 +81,34 @@ class GalleryModule(private val reactContext: ReactApplicationContext) :
     promise.resolve(videos)
   }
 }
+
+
+
+
+
+  // @ReactMethod
+  // fun getImages(promise: Promise) {
+  //   val images = Arguments.createArray()
+  //   val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+  //     MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+  //   } else {
+  //     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+  //   }
+
+  //   val projection = arrayOf(MediaStore.Images.Media._ID)
+  //   val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+  //   val cursor = reactContext.contentResolver.query(collection, projection, null, null, sortOrder)
+
+  //   cursor?.use {
+  //     val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+  //     while (it.moveToNext()) {
+  //       val id = it.getLong(idColumn)
+  //       val uri = ContentUris.withAppendedId(collection, id)
+  //       images.pushString(uri.toString())
+  //       imageObject.putString("name", name)
+
+  //     }
+  //   }
+
+  //   promise.resolve(images)
+  // }

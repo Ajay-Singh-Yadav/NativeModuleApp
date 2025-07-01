@@ -23,14 +23,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 
-const categories = [
-  { name: 'Downloads', size: '1.3 GB' },
-  { name: 'Images', size: '1.4 GB' },
-  { name: 'Videos', size: '4.9 GB' },
-  { name: 'Audio', size: '0.99 GB' },
-  { name: 'Documents', size: '22 MB' },
-  { name: 'Apps', size: '48 GB' },
-];
+import { categories } from '../helper/categories';
 
 const { BiometricModule } = NativeModules;
 
@@ -38,8 +31,10 @@ const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
   const blinkOpacity = useSharedValue(1);
+
+  const boxWidth = width * 0.48;
+  const textWidth = boxWidth * 2;
 
   const handleSafeFolderPress = async () => {
     try {
@@ -50,7 +45,6 @@ const HomeScreen = () => {
       if (result === 'SUCCESS') {
         navigation.navigate('Secure');
       } else {
-        // Alert.alert('Failed', 'Authentication unsuccessful.');
       }
     } catch (e) {
       console.log(e);
@@ -58,9 +52,6 @@ const HomeScreen = () => {
   };
 
   // Text Animation
-
-  const boxWidth = width * 0.48;
-  const textWidth = boxWidth * 2;
 
   const offsetX = useSharedValue(boxWidth);
 
@@ -82,14 +73,13 @@ const HomeScreen = () => {
       false,
     );
 
-    // blink animation
     blinkOpacity.value = withRepeat(
       withTiming(0, {
         duration: 500,
         easing: Easing.linear,
       }),
       -1,
-      true, // reverse = true (blinks back and forth)
+      true,
     );
   }, []);
 
@@ -105,23 +95,29 @@ const HomeScreen = () => {
 
       <View style={styles.gridContainer}>
         {categories.map((item, index) => (
-          <View key={index} style={styles.gridItem}>
+          <TouchableOpacity
+            onPress={() => {
+              if (item.name === 'Images') {
+                navigation.navigate('AllImages');
+              }
+            }}
+            key={index}
+            style={styles.gridItem}
+          >
             <Text style={styles.gridTitle}>{item.name}</Text>
             <Text style={styles.gridSub}>{item.size}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
 
-      {/* Collections */}
       <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Collections</Text>
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.collectionBox}
           onPress={() => {
-            navigation.navigate('files');
+            navigation.navigate('draggable');
           }}
         >
-          {/* <Text style={[styles.starIcon, blinkStyle]}>★ Starred</Text> */}
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Animated.Text style={[styles.starIcon, blinkStyle]}>
               ★

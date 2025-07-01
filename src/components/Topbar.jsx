@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-const TopBar = ({ title, showBack = false }) => {
+const TopBar = ({ title, showBack = false, toggleView, isGridView }) => {
   const navigation = useNavigation();
 
   return (
@@ -25,11 +25,18 @@ const TopBar = ({ title, showBack = false }) => {
         <TouchableOpacity style={styles.icon}>
           <Ionicons name="search" size={24} color="#fff" />
         </TouchableOpacity>
+
         <TouchableOpacity
+          onPress={toggleView}
           style={[styles.icon, { marginLeft: 20, marginRight: 15 }]}
         >
-          <Icon name="view-list" size={24} color="#fff" />
+          {isGridView ? (
+            <Icon name="view-list" size={24} color="#fff" /> // 👉 Show list icon when in grid mode
+          ) : (
+            <Ionicons name="grid-outline" size={24} color="#fff" /> // 👉 Show grid icon when in list mode
+          )}
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.icon}>
           <Icon name="more-vert" size={24} color="#fff" />
         </TouchableOpacity>

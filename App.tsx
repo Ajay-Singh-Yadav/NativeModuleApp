@@ -6,7 +6,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import SecureScreen from './src/screens/SecureScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import DraggableCard from './src/screens/DraggableCard';
-import MediaGalleryScreen from './src/screens/MediaGalleryScreen';
+import ImagesScreen from './src/screens/ImagesScreen';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +18,8 @@ const App = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Secure" component={SecureScreen} />
         <Stack.Screen name="Drag" component={DraggableCard} />
-        <Stack.Screen name="files" component={MediaGalleryScreen} />
+        <Stack.Screen name="AllImages" component={ImagesScreen} />
+        <Stack.Screen name="draggable" component={DraggableCard} />
       </Stack.Navigator>
     </NavigationContainer>
   );
