@@ -99,6 +99,8 @@ const HomeScreen = () => {
             onPress={() => {
               if (item.name === 'Images') {
                 navigation.navigate('AllImages');
+              } else if (item.name === 'Audio') {
+                navigation.navigate('AudioFiles');
               }
             }}
             key={index}

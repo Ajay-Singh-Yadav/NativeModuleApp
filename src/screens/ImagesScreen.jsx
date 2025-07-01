@@ -10,7 +10,10 @@ import {
 
 import { NativeModules } from 'react-native';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import { requestPermission } from '../helper/PermissionHelper';
+
 import TopBar from '../components/Topbar';
 
 const { GalleryModule } = NativeModules;
@@ -52,6 +55,7 @@ const ImagesScreen = () => {
             {(item.size / (1024 * 1024)).toFixed(2)} MB
           </Text>
         </View>
+        <Icon name="more-vert" size={24} color="#fff" />
       </View>
     );
   };
@@ -99,9 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     borderRadius: 8,
   },
-  activeTab: {
-    backgroundColor: '#00bcd4',
-  },
+
   tabText: {
     color: '#fff',
     fontWeight: 'bold',
