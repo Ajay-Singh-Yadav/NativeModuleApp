@@ -100,9 +100,14 @@ const HomeScreen = () => {
       {/* Collections */}
       <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Collections</Text>
       <View style={styles.row}>
-        <View style={styles.collectionBox}>
+        <TouchableOpacity
+          style={styles.collectionBox}
+          onPress={() => {
+            navigation.navigate('Drag');
+          }}
+        >
           <Text style={styles.gridTitle}>★ Starred</Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.collectionBox}
           onPress={handleSafeFolderPress}
