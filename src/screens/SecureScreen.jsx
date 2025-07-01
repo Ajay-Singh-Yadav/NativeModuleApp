@@ -25,8 +25,11 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import TopBar from '../components/Topbar';
 
 import LottieView from 'lottie-react-native';
+import { useDraggable } from '../customHooks/useDraggable';
+import DraggableImage from '../components/DraggableImage';
 
 const SecureScreen = () => {
+  const { gesturehandler, animatedStyle } = useDraggable();
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -71,12 +74,7 @@ const SecureScreen = () => {
             </View>
           ) : (
             images.map((uri, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => setSelectedImage(uri)}
-              >
-                <Image source={{ uri }} style={styles.image} />
-              </TouchableOpacity>
+              <DraggableImage key={index} ImageUri={uri} />
             ))
           )}
         </View>
@@ -84,24 +82,6 @@ const SecureScreen = () => {
       <TouchableOpacity style={styles.addButton} onPress={openGallery}>
         <Octicons name="shield-lock" size={24} color="#fff" />
       </TouchableOpacity>
-      {/* Fullscreen Image Modal */}
-      <Modal visible={!!selectedImage} transparent={true} animationType="fade">
-        <View style={styles.fullscreenContainer}>
-          <TouchableOpacity
-            style={styles.closeArea}
-            onPress={() => setSelectedImage(null)}
-          />
-          <Image
-            source={{ uri: selectedImage }}
-            style={styles.fullscreenImage}
-            resizeMode="contain"
-          />
-          <TouchableOpacity
-            style={styles.closeArea}
-            onPress={() => setSelectedImage(null)}
-          />
-        </View>
-      </Modal>
     </View>
   );
 };
