@@ -8,6 +8,7 @@ import SplashScreen from './src/screens/SplashScreen';
 import DraggableCard from './src/screens/DraggableCard';
 import ImagesScreen from './src/screens/ImagesScreen';
 import AudioFilesScreen from './src/screens/AudioFilesScreen';
+import ViewImageScreen from './src/screens/ViewImageScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const App = () => {
         <Stack.Screen name="AllImages" component={ImagesScreen} />
         <Stack.Screen name="draggable" component={DraggableCard} />
         <Stack.Screen name="AudioFiles" component={AudioFilesScreen} />
+        <Stack.Screen name="ViewImage" component={ViewImageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

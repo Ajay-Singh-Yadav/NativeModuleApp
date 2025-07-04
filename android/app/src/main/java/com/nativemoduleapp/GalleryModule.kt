@@ -26,8 +26,8 @@ class GalleryModule(private val reactContext: ReactApplicationContext) :
 
     val projection = arrayOf(
       MediaStore.Images.Media._ID,
-      MediaStore.Images.Media.DISPLAY_NAME, // 👈 Add file name
-      MediaStore.Images.Media.SIZE          // 👈 Add size if needed
+      MediaStore.Images.Media.DISPLAY_NAME,
+      MediaStore.Images.Media.SIZE          
     )
 
     val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"

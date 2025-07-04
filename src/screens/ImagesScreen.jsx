@@ -15,10 +15,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { requestPermission } from '../helper/PermissionHelper';
 
 import TopBar from '../components/Topbar';
+import { useNavigation } from '@react-navigation/native';
 
 const { GalleryModule } = NativeModules;
 
 const ImagesScreen = () => {
+  const navigation = useNavigation();
   const [images, setImages] = useState([]);
   const [isGridView, setIsGridView] = useState(true);
 
@@ -36,7 +38,9 @@ const ImagesScreen = () => {
   const renderImage = ({ item }) => {
     return isGridView ? (
       <View style={styles.gridItem}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ViewImage', item.uri)}
+        >
           <Image
             source={{ uri: item.uri }}
             style={styles.gridImage}
