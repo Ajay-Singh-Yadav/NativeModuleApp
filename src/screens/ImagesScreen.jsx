@@ -35,26 +35,32 @@ const ImagesScreen = () => {
 
   const renderImage = ({ item }) => {
     return isGridView ? (
-      <Image
-        source={{ uri: item.uri }}
-        style={styles.gridImage}
-        resizeMode="cover"
-      />
+      <View style={styles.gridItem}>
+        <TouchableOpacity>
+          <Image
+            source={{ uri: item.uri }}
+            style={styles.gridImage}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
+      </View>
     ) : (
       <View style={styles.listItem}>
-        <Image
-          source={{ uri: item.uri }}
-          style={styles.listThumbnail}
-          resizeMode="cover"
-        />
-        <View style={styles.listInfo}>
-          <Text style={styles.fileName} numberOfLines={1}>
-            {item.name}
-          </Text>
-          <Text style={styles.fileSize}>
-            {(item.size / (1024 * 1024)).toFixed(2)} MB
-          </Text>
-        </View>
+        <TouchableOpacity style={styles.imageListButton}>
+          <Image
+            source={{ uri: item.uri }}
+            style={styles.listThumbnail}
+            resizeMode="cover"
+          />
+          <View style={styles.listInfo}>
+            <Text style={styles.fileName} numberOfLines={1}>
+              {item.name}
+            </Text>
+            <Text style={styles.fileSize}>
+              {(item.size / (1024 * 1024)).toFixed(2)} MB
+            </Text>
+          </View>
+        </TouchableOpacity>
         <Icon name="more-vert" size={24} color="#fff" />
       </View>
     );
@@ -118,9 +124,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   gridImage: {
-    width: '32%',
-    height: 120,
-    margin: 4,
+    width: 160,
+    height: 130,
     borderRadius: 8,
   },
   listImage: {
@@ -175,5 +180,18 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: 12,
     marginTop: 4,
+  },
+  imageListButton: {
+    flexDirection: 'row',
+    marginRight: 10,
+    width: 420,
+  },
+  gridItem: {
+    width: 160,
+    height: 130,
+    marginTop: 13,
+    borderRadius: 8,
+    marginHorizontal: 4,
+    marginLeft: 2.5,
   },
 });
