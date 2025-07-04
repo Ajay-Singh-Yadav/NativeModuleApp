@@ -70,7 +70,7 @@ const SecureScreen = () => {
                 loop
                 style={styles.lottie}
               />
-              <Text style={styles.noImageTextWord}>No images added yet</Text>
+              <Text style={styles.noImageTextWord}>There's nothing here.</Text>
             </View>
           ) : (
             images.map((uri, index) => (

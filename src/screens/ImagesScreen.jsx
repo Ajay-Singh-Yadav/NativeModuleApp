@@ -90,7 +90,7 @@ const ImagesScreen = () => {
           data={images}
           renderItem={renderImage}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.gallery}
+          contentContainerStyle={[styles.gallery, { paddingBottom: 20 }]}
         />
       )}
     </View>
