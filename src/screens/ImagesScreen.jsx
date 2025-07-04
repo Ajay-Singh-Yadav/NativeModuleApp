@@ -39,7 +39,7 @@ const ImagesScreen = () => {
     return isGridView ? (
       <View style={styles.gridItem}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ViewImage', item.uri)}
+          onPress={() => navigation.navigate('ViewImage', { uri: item.uri })}
         >
           <Image
             source={{ uri: item.uri }}
@@ -50,7 +50,10 @@ const ImagesScreen = () => {
       </View>
     ) : (
       <View style={styles.listItem}>
-        <TouchableOpacity style={styles.imageListButton}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ViewImage', { uri: item.uri })}
+          style={styles.imageListButton}
+        >
           <Image
             source={{ uri: item.uri }}
             style={styles.listThumbnail}

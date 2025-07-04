@@ -13,8 +13,8 @@ import TopBar from '../components/Topbar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ViewImageScreen = () => {
-  const route = useRoute();
-  const uri = route.params;
+  const { uri } = useRoute().params;
+
   return (
     <SafeAreaView style={styles.container}>
       <TopBar title="View Image" showBack />
